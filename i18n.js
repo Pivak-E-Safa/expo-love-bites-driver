@@ -9,16 +9,16 @@ import { zh } from './translations/zh'
 import { de } from './translations/de'
 import { ar } from './translations/ar'
 
-// i18n.initAsync = async() => {
-//   i18n.fallbacks = true
-//   i18n.translations = { fr, en, km, zh, de, ar }
-//   // i18n.locale = 'km'
-//   if (Platform.OS === 'android') {
-//     const lang = await AsyncStorage.getItem('lovebites-language')
-//     i18n.locale = lang || 'en'
-//   } else {
-//     i18n.locale = Localization.locale
-//   }
-// }
+i18n.initAsync = async() => {
+  i18n.fallbacks = true
+  i18n.translations = { fr, en, km, zh, de, ar }
+  // i18n.locale = 'km'
+  if (Platform.OS === 'android') {
+    const lang = await AsyncStorage.getItem('lovebites-language')
+    i18n.locale = lang || 'en'
+  } else {
+    i18n.locale = Localization.locale
+  }
+}
 
 export default i18n

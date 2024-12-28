@@ -5,7 +5,7 @@ import { theme } from '../../../utils/themeColors'
 
 function SearchFood(props) {
   const themeContext = useContext(ThemeContext)
-  const currentTheme = theme[themeContext.ThemeValue]
+  const currentTheme = theme['Dark']
   return (
     <Svg viewBox="0 0 750 500" {...props}>
       <Path

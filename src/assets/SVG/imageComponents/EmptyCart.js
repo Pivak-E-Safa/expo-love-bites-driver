@@ -13,7 +13,7 @@ import { theme } from '../../../utils/themeColors'
 
 function EmptyCart(props) {
   const themeContext = useContext(ThemeContext)
-  const currentTheme = theme[themeContext.ThemeValue]
+  const currentTheme = theme['Dark']
   return (
     <Svg viewBox="0 0 500 500" {...props}>
       <Defs>

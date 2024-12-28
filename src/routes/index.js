@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import navigationService from './navigationService'
 import SideBar from '../components/Sidebar/Sidebar'
 import Main from '../screens/Main/Main'
+import RestaurantDetails from '../screens/RestaurantDetails/RestaurantDetails'
 import { theme } from '../utils/themeColors'
 import screenOptions from './screenOptions'
 const NavigationStack = createStackNavigator()
@@ -38,6 +39,11 @@ function NoDrawer() {
       <NavigationStack.Screen
         name="Main"
         component={Main}
+        options={{ header: () => null }}
+      />
+      <NavigationStack.Screen
+        name="RestaurantDetails"
+        component={RestaurantDetails}
         options={{ header: () => null }}
       />
     </NavigationStack.Navigator>

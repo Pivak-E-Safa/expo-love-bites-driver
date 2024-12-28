@@ -5,6 +5,9 @@ import SignInScreen from "./screens/SignInScreen";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import Main from "./src/screens/Main/Main";
+import i18n from './i18n'
+import * as SplashScreen from 'expo-splash-screen'
+import * as Font from 'expo-font'
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -20,12 +23,49 @@ WebBrowser.maybeCompleteAuthSession();
 export default function App() {
   const [userInfo, setUserInfo] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const [appIsReady, setAppIsReady] = React.useState(false)
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId:
       "58997111212-97ape976m5m5jvceqctue81b7k16gi4h.apps.googleusercontent.com",
     androidClientId:
       "58997111212-21obk57428qjt1vh1jcml6uen4qq0uno.apps.googleusercontent.com",
   });
+
+  React.useEffect(() => {
+    ;(async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync()
+      } catch (e) {
+        console.warn(e)
+      }
+      loadAppData()
+    })()
+
+    return () => {
+      // BackHandler.removeEventListener('hardwareBackPress', exitAlert)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if (!appIsReady) return
+    ;(async () => {
+      await SplashScreen.hideAsync()
+    })()
+  }, [appIsReady])
+
+  async function loadAppData() {
+    await i18n.initAsync()
+    await Font.loadAsync({
+      FredokaLight: require('./src/assets/font/Fredoka/Fredoka-Light.ttf'),
+      FredokaRegular: require('./src/assets/font/Fredoka/Fredoka-Regular.ttf'),
+      FredokaBold: require('./src/assets/font/Fredoka/Fredoka-Bold.ttf')
+    })
+    // await permissionForPushNotificationsAsync()
+    // await getActiveLocation()
+    // BackHandler.addEventListener('hardwareBackPress', exitAlert)
+
+    setAppIsReady(true)
+  }
 
   const checkLocaluser = async () => {
     try {
@@ -69,8 +109,15 @@ export default function App() {
         <ActivityIndicator size={"large"}></ActivityIndicator>
       </View>
     );
+
+    if (appIsReady) {
+      return (
+        <AppContainer />
+      )
+    } else {
+      return null
+    }
     
-  return <AppContainer />;
   // return userInfo ? <Text>Rest of the application</Text> : <Main></Main>;
 }
 

@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import styles from "./styles";
-// import { useNavigation, useFocusEffect } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { theme } from "../../utils/themeColors";
 import { fetchRestaurantList } from "../../firebase/restaurants";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -17,7 +17,7 @@ import { fontStyles } from "../../utils/fontStyles";
 import FastImage from "react-native-fast-image";
 
 function Main() {
-  // const navigation = useNavigation()
+  const navigation = useNavigation()
   const currentTheme = theme["Dark"];
   const [selectedValue, setSelectedValue] = useState();
   const [restaurantsData, setRestaurantsData] = useState([]);
@@ -57,7 +57,7 @@ function Main() {
   }, []);
 
   function onEnter() {
-    // navigation.navigate('RestaurantDetails', { id: selectedValue });
+    navigation.navigate('RestaurantDetails', { id: selectedValue });
   }
 
   return (

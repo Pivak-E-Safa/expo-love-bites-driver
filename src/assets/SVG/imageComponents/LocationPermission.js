@@ -5,7 +5,7 @@ import { theme } from '../../../utils/themeColors'
 
 function LocationPermission(props) {
   const themeContext = useContext(ThemeContext)
-  const currentTheme = theme[themeContext.ThemeValue]
+  const currentTheme = theme['Dark']
   return (
     <Svg viewBox="0 0 500 500" {...props}>
       <Path fill="#e0e0e0" d="M95.12 322.65h68.79V453.2H95.12z" />

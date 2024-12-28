@@ -5,7 +5,7 @@ import { theme } from '../../../utils/themeColors'
 
 function CartIcon(props) {
   const themeContext = useContext(ThemeContext)
-  const currentTheme = theme[themeContext.ThemeValue]
+  const currentTheme = theme['Dark']
   return (
     <Svg width={149} height={207} viewBox="0 0 149 207" fill="none" {...props}>
       <Path

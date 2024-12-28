@@ -139,7 +139,7 @@ function RightButton(props) {
   const navigation = useNavigation()
   const route = useRoute()
   const themeContext = useContext(ThemeContext)
-  const currentTheme = theme[themeContext.ThemeValue]
+  const currentTheme = theme['Dark']
   const { cartCount, isLoggedIn, profile } = useContext(UserContext)
   function showPasswordButton() {
     props.titlePosition(prev => !prev)
