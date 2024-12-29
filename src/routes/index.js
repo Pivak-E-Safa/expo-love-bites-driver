@@ -1,75 +1,66 @@
-import React, { useCallback, useContext, useEffect } from 'react'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { createDrawerNavigator } from '@react-navigation/drawer'
-import navigationService from './navigationService'
-import SideBar from '../components/Sidebar/Sidebar'
-import Main from '../screens/Main/Main'
-import RestaurantDetails from '../screens/RestaurantDetails/RestaurantDetails'
-import { theme } from '../utils/themeColors'
-import screenOptions from './screenOptions'
-const NavigationStack = createStackNavigator()
-const MainStack = createStackNavigator()
-const SideDrawer = createDrawerNavigator()
+import React, { useContext } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import navigationService from "./navigationService";
+import SideBar from "../components/Sidebar/Sidebar";
+import UserContext from "../context/User";
+import Main from "../screens/Main/Main";
+import SignIn from "../screens/SignIn/SignIn";
+import RestaurantDetails from "../screens/RestaurantDetails/RestaurantDetails";
 
-function Drawer() {
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function DrawerNavigator() {
   return (
-    <SideDrawer.Navigator drawerContent={props => <SideBar {...props} />}>
-      <SideDrawer.Screen
-        options={{ headerShown: false }}
-        name="NoDrawer"
-        component={NoDrawer}
-      />
-    </SideDrawer.Navigator>
-  )
-}
-function NoDrawer() {
-  const currentTheme = theme['Dark']
-  return (
-    <NavigationStack.Navigator
-      screenOptions={screenOptions({
-        theme: 'Dark',
-        headerMenuBackground: currentTheme.headerMenuBackground,
-        backColor: currentTheme.headerBackground,
-        lineColor: currentTheme.horizontalLine,
-        textColor: currentTheme.headerText,
-        iconColor: currentTheme.iconColorPink
-      })}>
-      <NavigationStack.Screen
-        name="Main"
-        component={Main}
-        options={{ header: () => null }}
-      />
-      <NavigationStack.Screen
-        name="RestaurantDetails"
-        component={RestaurantDetails}
-        options={{ header: () => null }}
-      />
-    </NavigationStack.Navigator>
-  )
+    <Drawer.Navigator
+      drawerContent={(props) => <SideBar {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Drawer.Screen name="Main" component={Main} />
+      <Drawer.Screen name="RestaurantDetails" component={RestaurantDetails} />
+    </Drawer.Navigator>
+  );
 }
 
+function AuthNavigator() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="RestaurantDetails" component={RestaurantDetails} />
+    </Stack.Navigator>
+  );
+}
 
-function AppContainer() {
+function AppNavigator() {
+  const { isLoggedIn } = useContext(UserContext);
 
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* Main screen is always shown first */}
+      <Stack.Screen name="Main" component={Main} />
+      {/* Conditional navigation based on authentication */}
+      {isLoggedIn ? (
+        <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+      ) : (
+        <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
+      )}
+    </Stack.Navigator>
+  );
+}
+
+export default function AppContainer() {
   return (
     <SafeAreaProvider>
       <NavigationContainer
-        ref={ref => {
-          navigationService.setGlobalRef(ref)
-        }}>
-        <MainStack.Navigator
-          initialRouteName={'Drawer'}>
-              <MainStack.Screen
-                name="Drawer"
-                component={Drawer}
-                options={{ headerShown: false }}
-              />
-        </MainStack.Navigator>
+        ref={(ref) => {
+          navigationService.setGlobalRef(ref);
+        }}
+      >
+        <AppNavigator />
       </NavigationContainer>
     </SafeAreaProvider>
-  )
+  );
 }
-
-export default AppContainer

@@ -1,8 +1,8 @@
-// NEWWW
-//
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDfHGnPWQrWwOHJW-szaIrfWNPc2hID3kI",
   authDomain: "expo-love-bites.firebaseapp.com",
@@ -15,7 +15,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-export const auth = getAuth(app);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+
+export { auth, firestore };
+
 
 // IOS: 58997111212-97ape976m5m5jvceqctue81b7k16gi4h.apps.googleusercontent.com
 // Android: 58997111212-21obk57428qjt1vh1jcml6uen4qq0uno.apps.googleusercontent.com

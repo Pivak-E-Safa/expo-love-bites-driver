@@ -77,8 +77,9 @@ function SidebBar(props) {
                   // await Analytics.track(Analytics.events.USER_LOGGED_OUT)
                   // await Analytics.identify(null, null)
 
-                  logout()
-                  props.navigation.closeDrawer()
+                  logout();
+                  props.navigation.closeDrawer();
+                  props.navigation.navigate('Main');
                 }}
                 icon={'logout'}
                 title={i18n.t('titleLogout')}

@@ -1,102 +1,110 @@
-import { firestore } from '../../firebase.config'
+import { firestore } from "../../firebaseConfig";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 
+// Function to fetch user by email
 async function getUserByEmail(email) {
   try {
-    const usersRef = firestore.collection('users');
-    const querySnapshot = await usersRef.where('email', '==', email).get();
+    const usersRef = collection(firestore, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-      console.log('No matching documents.');
+      console.log("No matching documents.");
       return null;
     }
 
     let userData = null;
-    querySnapshot.forEach(doc => {
-      userData = { id: doc.id, ...doc.data() };
-    });
-    const addressesRef = firestore.collection(`users/${userData.id}/addresses`);
-    const addressesSnapshot = await addressesRef.get();
-
-    let addresses = [];
-    addressesSnapshot.forEach(doc => {
-      addresses.push({ id: doc.id, ...doc.data() });
+    querySnapshot.forEach((docSnapshot) => {
+      userData = { id: docSnapshot.id, ...docSnapshot.data() };
     });
 
-    userData.addresses = addresses;
-    // console.log('User with Addresses:', JSON.stringify(userData, null, 2));
+    if (userData) {
+      const addressesRef = collection(firestore, `users/${userData.id}/addresses`);
+      const addressesSnapshot = await getDocs(addressesRef);
+
+      let addresses = [];
+      addressesSnapshot.forEach((docSnapshot) => {
+        addresses.push({ id: docSnapshot.id, ...docSnapshot.data() });
+      });
+
+      userData.addresses = addresses;
+    }
 
     return userData;
   } catch (error) {
-    console.error('Error fetching user by email: ', error);
+    console.error("Error fetching user by email: ", error);
     return null;
   }
 }
 
+// Function to update user profile by email
 async function updateUserProfileByEmail(email, updatedProfileData, updatePhoneIsVerified) {
   try {
-    const usersRef = firestore.collection('users');
-    const querySnapshot = await usersRef.where('email', '==', email).get();
+    const usersRef = collection(firestore, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-      console.log('No matching documents.');
+      console.log("No matching documents.");
       return null;
     }
 
     let userDocId = null;
-    querySnapshot.forEach(doc => {
-      userDocId = doc.id;
+    querySnapshot.forEach((docSnapshot) => {
+      userDocId = docSnapshot.id;
     });
 
     if (userDocId) {
+      const userDocRef = doc(firestore, "users", userDocId);
+
+      const updateData = {
+        name: updatedProfileData.name,
+        phone: updatedProfileData.phone,
+      };
       if (updatePhoneIsVerified) {
-        await usersRef.doc(userDocId).update({
-          name: updatedProfileData.name,
-          phone: updatedProfileData.phone,
-          phoneIsVerified: updatedProfileData.phoneIsVerified
-        });
-      } else {
-        await usersRef.doc(userDocId).update({
-          name: updatedProfileData.name,
-          phone: updatedProfileData.phone
-        });
+        updateData.phoneIsVerified = updatedProfileData.phoneIsVerified;
       }
 
-      console.log('User profile updated successfully for email:', email);
+      await updateDoc(userDocRef, updateData);
+
+      console.log("User profile updated successfully for email:", email);
 
       // Fetch the updated user document
-      const updatedUserSnapshot = await usersRef.doc(userDocId).get();
+      const updatedUserSnapshot = await getDoc(userDocRef);
       const updatedUserData = { id: updatedUserSnapshot.id, ...updatedUserSnapshot.data() };
 
-      console.log('Updated User Profile:', JSON.stringify(updatedUserData, null, 2));
+      console.log("Updated User Profile:", JSON.stringify(updatedUserData, null, 2));
       return updatedUserData;
     } else {
-      console.log('User document ID not found.');
+      console.log("User document ID not found.");
       return null;
     }
   } catch (error) {
-    console.error('Error updating user profile by email:', error);
+    console.error("Error updating user profile by email:", error);
     return null;
   }
 }
 
-
+// Function to add a new user
 async function setUser(userData) {
   try {
-    const userRef = firestore.collection('users');
-    const newUserRef = await userRef.add(userData);
-
-    console.log('User profile set successfully for user ID:', newUserRef.id);
-
+    const userRef = collection(firestore, "users");
+    const newUserRef = await addDoc(userRef, userData);
+    console.log("User profile set successfully for user ID:", newUserRef.id);
     return userData;
   } catch (error) {
-    console.error('Error setting user profile:', error);
+    console.error("Error setting user profile:", error);
     return null;
   }
 }
 
-
-module.exports = {
-  getUserByEmail,
-  updateUserProfileByEmail,
-  setUser
-}
+export { getUserByEmail, updateUserProfileByEmail, setUser };

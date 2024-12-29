@@ -29,7 +29,7 @@ function BackButton(props) {
   if (props.icon === 'leftArrow') {
     return (
       <Ionicons
-        name="ios-arrow-back"
+        name="arrow-back"
         size={16}
         style={styles().leftIconPadding}
         color={props.iconColor}

@@ -94,6 +94,7 @@ const styles = (props = null) =>
       left: 0,
       right: 0,
       bottom: '75%',
+      height: '40px',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'transparent',

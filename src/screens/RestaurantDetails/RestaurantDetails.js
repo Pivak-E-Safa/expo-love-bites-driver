@@ -11,7 +11,7 @@ import {
   StatusBar,
   Platform,
   Dimensions,
-  Linking
+  Linking,
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -232,9 +232,7 @@ function RestaurantDetails(props) {
                   </Animated.Text>
 
                   <View style={styles().socialContainer}>
-                    {/* First row */}
                     <View style={styles().row}>
-                      {/* Instagram */}
                       <TouchableOpacity
                         style={styles().iconWrapper}
                         onPress={() => Linking.openURL(restaurant.instagram)}>
@@ -246,7 +244,6 @@ function RestaurantDetails(props) {
                         />
                       </TouchableOpacity>
 
-                      {/* Facebook */}
                       <TouchableOpacity
                         style={styles().iconWrapper}
                         onPress={() => Linking.openURL(restaurant.facebook)}>
@@ -259,9 +256,7 @@ function RestaurantDetails(props) {
                       </TouchableOpacity>
                     </View>
 
-                    {/* Second row */}
                     <View style={styles().row}>
-                      {/* Google Maps */}
                       <TouchableOpacity
                         style={styles().iconWrapper}
                         onPress={() => Linking.openURL(restaurant.googleMaps)}>
@@ -273,7 +268,6 @@ function RestaurantDetails(props) {
                         />
                       </TouchableOpacity>
 
-                      {/* WhatsApp */}
                       <TouchableOpacity
                         style={styles().iconWrapper}
                         onPress={() => Linking.openURL(restaurant.whatsapp)}>
