@@ -176,15 +176,18 @@ function RestaurantDetails(props) {
               paddingTop: '40%',
               marginTop: '30%'
             }}>
-            <ImageSlider
+            {/* <ImageSlider
               images={restaurantImages}
-            />
+            /> */}
 
             <View style={styles().bottomContainerParent}>
               <TouchableOpacity
                 style={[styles().card, styles().menu]}
                 onPress={() =>
-                  navigation.navigate('Restaurant', { id: restaurantId, data: data })
+                  navigation.navigate("DrawerNavigator", {
+                    screen: "Restaurant",
+                    params: { id: restaurantId, data: data },
+                  })
                 }>
                 <Animated.Image
                   resizeMode="cover"

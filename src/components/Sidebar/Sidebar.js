@@ -60,7 +60,7 @@ function SidebBar(props) {
               <SideDrawerItems
                 onPress={async() => {
                   if (dataItem.isAuth && !isLoggedIn) {
-                    props.navigation.navigate('CreateAccount')
+                    props.navigation.navigate('SignIn')
                   } else {
                     props.navigation.navigate(dataItem.navigateTo)
                   }
@@ -79,7 +79,6 @@ function SidebBar(props) {
 
                   logout();
                   props.navigation.closeDrawer();
-                  props.navigation.navigate('Main');
                 }}
                 icon={'logout'}
                 title={i18n.t('titleLogout')}

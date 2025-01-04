@@ -21,7 +21,7 @@ function DrawerProfile(props) {
           <TouchableOpacity
             style={{ ...alignment.PTxSmall, ...alignment.PBxSmall }}
             onPress={() => {
-              props.navigation.navigate({ name: 'CreateAccount' })
+              props.navigation.navigate({ name: 'SignIn' })
             }}>
             <TextDefault textColor={currentTheme.fontWhite} bold H5>
               Login/Create Account

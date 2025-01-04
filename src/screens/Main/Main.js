@@ -7,7 +7,6 @@ import {
   Platform,
   Image,
 } from "react-native";
-import AuthContext from "../../context/Auth";
 import UserContext, { UserProvider } from "../../context/User";
 import styles from "./styles";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -16,14 +15,6 @@ import { fetchRestaurantList } from "../../firebase/restaurants";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Dropdown } from "react-native-element-dropdown";
 import { fontStyles } from "../../utils/fontStyles";
-import * as Google from "expo-auth-session/providers/google";
-import { auth } from "../../../firebaseConfig";
-import { setUser, getUserByEmail } from "../../firebase/profile";
-import {
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithCredential,
-} from "firebase/auth";
 
 function Main() {
   const [loading, setLoading] = React.useState(false);
@@ -31,17 +22,7 @@ function Main() {
   const currentTheme = theme["Dark"];
   const { selectedValue, setSelectedValue } = useContext(UserContext);
   const [restaurantsData, setRestaurantsData] = useState([]);
-  const { email, token, setIdAsync, setTokenAsync, setEmailAsync } =
-    useContext(AuthContext);
-  const { setProfile } = useContext(UserContext);
   const gif = require("../../assets/GIF/home.gif");
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId:
-      "58997111212-97ape976m5m5jvceqctue81b7k16gi4h.apps.googleusercontent.com",
-    androidClientId:
-      "58997111212-21obk57428qjt1vh1jcml6uen4qq0uno.apps.googleusercontent.com",
-  });
-
   const [restaurants, setRestaurants] = useState([]);
 
   const error = null;
@@ -74,61 +55,11 @@ function Main() {
     getRestaurants();
   }, []);
 
-  React.useEffect(() => {
-    if (response?.type === "success") {
-      const { id_token } = response.params;
-      const credential = GoogleAuthProvider.credential(id_token);
-      signInWithCredential(auth, credential);
-    }
-    // handle rest of the scenarios as well
-  }, [response]);
-
-  React.useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (user) => {
-      try {
-        if (user) {
-          await setEmailAsync(user.email);
-          await setIdAsync(user.uid);
-          await setTokenAsync(user.stsTokenManager.accessToken);
-          const existingUser = await getUserByEmail(user.email);
-          if (existingUser === null) {
-            const data = {
-              phone: "",
-              email: user.email,
-              phoneIsVerified: false,
-              name: user.displayName,
-            };
-            await setUser(data);
-            setProfile(data);
-          } else {
-            setProfile(existingUser);
-          }
-          navigation.navigate("DrawerNavigator", {
-            screen: "RestaurantDetails",
-            params: { id: selectedValue },
-          });
-        } else {
-          console.log("User is not authenticated");
-        }
-      } catch (error) {
-        console.log("Error is", error);
-      }
-    });
-    return () => unsub();
-  }, []);
-
   function onEnter() {
-    if (token && email) {
-      navigation.navigate("DrawerNavigator", {
-        screen: "RestaurantDetails",
-        params: { id: selectedValue },
-      });
-    } else {
-      navigation.navigate("AuthNavigator", {
-        screen: "SignIn",
-        params: { promptAsync },
-      });
-    }
+    navigation.navigate("DrawerNavigator", {
+      screen: "RestaurantDetails",
+      params: { id: selectedValue },
+    });
   }
 
   if (loading)
