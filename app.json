@@ -14,18 +14,26 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ghazwa-irshad.expolovebites"
+      "bundleIdentifier": "com.ghazwairshad.lovebitesgoogle"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ghazwa_irshad.expolovebites"
+      "package": "com.ghazwairshad.lovebitesgoogle"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.478147632680-du93puo7pbkdjmdtrahhqergbu1l5plq"
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "0ba1e25d-a00b-4196-beba-44825fec6885"

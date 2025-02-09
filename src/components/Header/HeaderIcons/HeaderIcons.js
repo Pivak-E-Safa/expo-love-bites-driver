@@ -167,7 +167,7 @@ function RightButton(props) {
                 ? currentTheme.fontWhite
                 : currentTheme.black
             }
-            style={{ fontSize: scale(7) }}
+            // style={{ fontSize: scale(7) }}
             center
             bold>
             {cartCount}
@@ -196,7 +196,7 @@ function RightButton(props) {
             onPress={clickPasswordButton}>
             <View style={styles(currentTheme.cartContainer).titlePasswordText}>
               <TextDefault
-                style={{ fontSize: scale(11) }}
+                // style={{ fontSize: scale(11) }}
                 textColor={currentTheme.fontMainColor}
                 bold>
                 Change password

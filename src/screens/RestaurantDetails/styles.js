@@ -164,7 +164,7 @@ const styles = (props = null) =>
     },
     videoText: {
       color: 'white',
-      fontSize: 22,
+      // fontSize: 22,
       fontFamily: fontStyles.FredokaBold,
       textAlign: 'center',
       marginTop: 15
@@ -172,7 +172,7 @@ const styles = (props = null) =>
     menuText: {
       position: 'absolute',
       color: 'white',
-      fontSize: 25,
+      // fontSize: 25,
       fontFamily: fontStyles.FredokaBold,
       textAlign: 'center',
       marginTop: 60,

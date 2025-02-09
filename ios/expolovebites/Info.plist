@@ -28,13 +28,19 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>expo-love-bites</string>
-          <string>com.ghazwa-irshad.expolovebites</string>
+          <string>com.ghazwairshad.lovebitesgoogle</string>
         </array>
       </dict>
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
           <string>exp+expo-love-bites</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.478147632680-du93puo7pbkdjmdtrahhqergbu1l5plq</string>
         </array>
       </dict>
     </array>

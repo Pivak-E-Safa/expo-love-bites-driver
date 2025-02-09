@@ -66,7 +66,7 @@ const styles = (props = null) =>
     },
     deliveryBox: {
       color: props != null ? props.fontWhite : 'white',
-      fontSize: scale(12),
+      // fontSize: scale(12),
       borderWidth: StyleSheet.hairlineWidth * 2,
       borderColor: props != null ? props.white : 'white',
       backgroundColor: 'rgba(0,0,0,0.6)',

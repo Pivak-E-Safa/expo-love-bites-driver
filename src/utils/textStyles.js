@@ -3,28 +3,28 @@ import { fontStyles } from './fontStyles'
 
 export const textStyles = {
   H1: {
-    fontSize: scale(35)
+    // fontSize: scale(35)
   },
   H2: {
-    fontSize: scale(24)
+    // fontSize: scale(24)
   },
   H3: {
-    fontSize: scale(20)
+    // fontSize: scale(20)
   },
   H4: {
-    fontSize: scale(16)
+    // fontSize: scale(16)
   },
   H5: {
-    fontSize: scale(14)
+    // fontSize: scale(14)
   },
   Normal: {
-    fontSize: scale(12)
+    // fontSize: scale(12)
   },
   Small: {
-    fontSize: scale(10)
+    // fontSize: scale(10)
   },
   Smaller: {
-    fontSize: scale(8)
+    // fontSize: scale(8)
   },
   Regular: {
     fontFamily: fontStyles.FredokaLight

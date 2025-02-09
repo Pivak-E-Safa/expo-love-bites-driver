@@ -67,7 +67,7 @@ function ImageTextCenterHeader(props, ref) {
 
   const emptyView = () => {
     return (
-      <View
+      <Animated.View
         style={{
           width: '100%',
           height: verticalScale(40),
@@ -75,7 +75,7 @@ function ImageTextCenterHeader(props, ref) {
           alignItems: 'center'
         }}>
         <TextError text="No items exists" />
-      </View>
+      </Animated.View>
     )
   }
 
@@ -91,17 +91,14 @@ function ImageTextCenterHeader(props, ref) {
         }
       ]}>
       <Animated.View
-        style={{ 
-          // height: Animated.sub(props.height, TOP_BAR_HEIGHT) 
-          }}>
+        style={{ height: props.height - TOP_BAR_HEIGHT }}>
         <Animated.Image
-          resizeMode="cover"
-          source={{ uri: aboutObject.restaurantImage }}
-          style={[styles().flex, { opacity: props.opacity, borderRadius: 10 }]}
+          source={{ uri: 'https://www.gstatic.com/webp/gallery/1.jpg' }}
+          style={[styles().flex, { opacity: props.opacity, borderRadius: 10, color: 'purple' }]}
         />
         <Animated.View style={styles().overlayContainer}>
-          <View style={styles().fixedViewNavigation}>
-            <View style={styles().fixedIcons}>
+          <Animated.View style={styles().fixedViewNavigation}>
+            <Animated.View style={styles().fixedIcons}>
               <AnimatedBorderless
                 activeOpacity={0.7}
                 rippleColor={currentTheme.rippleColor}
@@ -119,7 +116,7 @@ function ImageTextCenterHeader(props, ref) {
                   name="arrow-back"
                   style={{
                     color: props.iconColor,
-                    fontSize: props.iconSize
+                    // fontSize: props.iconSize
                   }}
                 />
               </AnimatedBorderless>
@@ -128,7 +125,7 @@ function ImageTextCenterHeader(props, ref) {
                 style={[
                   styles(currentTheme).headerTitle,
                   {
-                    // opacity: Animated.sub(1, props.opacity),
+                    opacity: 1 - props.opacity,
                     marginBottom: props.headerTextFlex
                   }
                 ]}>
@@ -165,23 +162,23 @@ function ImageTextCenterHeader(props, ref) {
                   />
                 </AnimatedBorderless>
               )}
-            </View>
-          </View>
+            </Animated.View>
+          </Animated.View>
           <Animated.View
             style={[styles().fixedView, { opacity: props.opacity }]}>
-            <View style={styles().fixedText}>
+            <Animated.View style={styles().fixedText}>
               <TextDefault H4 bolder Center textColor={currentTheme.fontWhite}>
                 {aboutObject.restaurantName}
               </TextDefault>
               {!props.loading && (
-                <View style={styles(currentTheme).deliveryBox}>
+                <Animated.View style={styles(currentTheme).deliveryBox}>
                   <TextDefault
                     style={[alignment.PRxSmall, alignment.PLxSmall]}
                     textColor="white"
                     bold>
                     Delivery {aboutObject.deliveryTime} Minute
                   </TextDefault>
-                </View>
+                </Animated.View>
               )}
               {!props.loading && (
                 <TouchableOpacity
@@ -195,7 +192,7 @@ function ImageTextCenterHeader(props, ref) {
                   }}>
                 </TouchableOpacity>
               )}
-            </View>
+            </Animated.View>
           </Animated.View>
         </Animated.View>
       </Animated.View>
@@ -211,7 +208,7 @@ function ImageTextCenterHeader(props, ref) {
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
-            <View
+            <Animated.View
               style={[
                 props.selectedLabel === index
                   ? styles(currentTheme).activeHeader
@@ -223,7 +220,7 @@ function ImageTextCenterHeader(props, ref) {
                 rippleColor={currentTheme.rippleColor}
                 onPress={() => props.changeIndex(index)}
                 style={styles(currentTheme).headerContainer}>
-                <View style={styles().navbarImageContainer}>
+                <Animated.View style={styles().navbarImageContainer}>
                   <Image
                     source={CATEGORY_IMAGES[item.title]}
                     style={
@@ -233,9 +230,9 @@ function ImageTextCenterHeader(props, ref) {
                     }
                     resizeMode="contain"
                   />
-                </View>
+                </Animated.View>
               </RectButton>
-            </View>
+            </Animated.View>
           )}
         />
       )}

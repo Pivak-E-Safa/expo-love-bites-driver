@@ -71,7 +71,7 @@ function ImageTextCenterHeader(props, ref) {
                   name="menu"
                   style={{
                     color: props.iconColor,
-                    fontSize: props.iconSize
+                    // fontSize: props.iconSize
                   }}
                 />
               </AnimatedBorderless>

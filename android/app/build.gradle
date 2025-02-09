@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.ghazwa_irshad.expolovebites'
+    namespace 'com.ghazwairshad.lovebitesgoogle'
     defaultConfig {
-        applicationId 'com.ghazwa_irshad.expolovebites'
+        applicationId 'com.ghazwairshad.lovebitesgoogle'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

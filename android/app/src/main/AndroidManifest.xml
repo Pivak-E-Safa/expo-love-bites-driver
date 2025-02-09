@@ -24,9 +24,9 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="com.ghazwa_irshad.expolovebites"/>
-        <data android:scheme="exp+expo-love-bites"/>
         <data android:scheme="expo-love-bites"/>
+        <data android:scheme="com.ghazwairshad.lovebitesgoogle"/>
+        <data android:scheme="exp+expo-love-bites"/>
       </intent-filter>
     </activity>
   </application>

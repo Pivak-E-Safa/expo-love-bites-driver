@@ -22,5 +22,5 @@ export { auth, firestore };
 
 
 // IOS: 58997111212-97ape976m5m5jvceqctue81b7k16gi4h.apps.googleusercontent.com
-// Android: 58997111212-21obk57428qjt1vh1jcml6uen4qq0uno.apps.googleusercontent.com
-// Web: 58997111212-ocgshpeqo35lc8lfe9g2n8o50615bpp0.apps.googleusercontent.com
+// Android: 58997111212-r67a7a179e8pi79ktgqvre16lt5fhhgg.apps.googleusercontent.com
+// Web: 58997111212-s608ogjgfelvjja1o4ii4dri1hkfbg3p.apps.googleusercontent.com

@@ -59,7 +59,7 @@ const SignIn = ({ promptAsync }) => {
             style={{
               color: "#fff",
               fontWeight: "bold",
-              fontSize: '16',
+              // fontSize: '16',
             }}
           >
             Sign In With Google

@@ -118,7 +118,7 @@ const styles = (props = null) =>
     },
     text: {
       color: 'rgba(255, 255, 255, 10)',
-      fontSize: 18,
+      // fontSize: 18,
       alignItems: 'center', 
       textAlign: 'center',
       width: '100%',

@@ -97,7 +97,7 @@ function Main() {
               }}
               itemTextStyle={{
                 color: "white",
-                fontSize: 14,
+                // fontSize: 14,
                 alignItems: "center",
                 textAlign: "center",
                 fontFamily: fontStyles.FredokaBold,

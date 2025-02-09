@@ -1,4 +1,4 @@
-package com.ghazwa_irshad.expolovebites
+package com.ghazwairshad.lovebitesgoogle
 
 import android.app.Application
 import android.content.res.Configuration
