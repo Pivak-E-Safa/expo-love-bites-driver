@@ -9,13 +9,16 @@ import UserContext from "../context/User";
 import Main from "../screens/Main/Main";
 import SignIn from "../screens/SignIn/SignIn";
 import RestaurantDetails from "../screens/RestaurantDetails/RestaurantDetails";
+import ItemDetail from "../screens/ItemDetail/ItemDetail";
 import Restaurant from "../screens/Restaurant/Restaurant";
 import { setUser, getUserByEmail } from "../firebase/profile";
 import AuthContext from "../context/Auth";
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 import {
   GoogleSignin,
   statusCodes,
-} from '@react-native-google-signin/google-signin';
+} from "@react-native-google-signin/google-signin";
 
 GoogleSignin.configure({
   webClientId:
@@ -38,6 +41,7 @@ function DrawerNavigator() {
     >
       <Drawer.Screen name="Main" component={Main} />
       <Drawer.Screen name="RestaurantDetails" component={RestaurantDetails} />
+      <Drawer.Screen name="ItemDetail" component={ItemDetail} />
       <Drawer.Screen
         name="Restaurant"
         component={Restaurant}
@@ -49,34 +53,51 @@ function DrawerNavigator() {
 
 function AppNavigator() {
   const { isLoggedIn } = useContext(UserContext);
-  const { email, token, setIdAsync, setTokenAsync, setEmailAsync } =
-     useContext(AuthContext);
-   const { setProfile } = useContext(UserContext);
+  const { email, setIdAsync, setTokenAsync, setEmailAsync } =
+    useContext(AuthContext);
+  const { profile, setProfile } = useContext(UserContext);
 
-   const signIn = async () => {
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (isLoggedIn && email && !profile) {
+        const existingUser = await getUserByEmail(email);
+        setProfile(existingUser);
+      }
+    };
+    fetchUser();
+  }, [isLoggedIn]);
+
+  const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
       console.log(JSON.stringify(response?.data?.user, null, 2));
-      if (response?.type === 'success') {  
+      if (response?.type === "success") {
         const user = response?.data?.user;
         if (user) {
+          const idToken = response?.data?.idToken;
+          if (idToken) {
+            const firebaseCredential = GoogleAuthProvider.credential(idToken);
+            await signInWithCredential(auth, firebaseCredential);
+          }
+          const existingUser = await getUserByEmail(user.email);
+          const data = {
+            phone: "",
+            email: user.email,
+            phoneIsVerified: false,
+            name: user.name,
+            photo: user.photo,
+            id: user.id,
+          };
+          if (existingUser === null) {
+            await setUser(data);
+            setProfile({...data, phoneIsVerified: false});
+          } else {
+            setProfile({...data, phoneIsVerified: existingUser?.phoneIsVerified});
+          }
           await setEmailAsync(user.email);
           await setIdAsync(user.id);
-          await setTokenAsync(response?.data?.idToken);
-          const existingUser = await getUserByEmail(user.email);
-          if (existingUser === null) {
-            const data = {
-              phone: "",
-              email: user.email,
-              phoneIsVerified: false,
-              name: user.name,
-            };
-            await setUser(data);
-            setProfile(data);
-          } else {
-            setProfile(existingUser);
-          }
+          await setTokenAsync(idToken);
         } else {
           console.log("User is not authenticated");
         }
@@ -84,8 +105,8 @@ function AppNavigator() {
         // sign in was cancelled by user
       }
     } catch (error) {
-        console.log('error');
-        console.log(error);
+      console.log("error");
+      console.log(error);
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:

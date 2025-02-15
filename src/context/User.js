@@ -7,6 +7,7 @@ import AuthContext from "./Auth";
 import { getUserByEmail } from "../firebase/profile";
 import { auth } from "../../firebaseConfig";
 import { signOut } from "firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const UserContext = React.createContext({});
 
@@ -17,7 +18,7 @@ export const UserProvider = (props) => {
   const { location, setLocation } = useContext(LocationContext);
   const [cart, setCart] = useState([]);
   const [restaurant, setRestaurant] = useState(null);
-  const [selectedValue, setSelectedValue] = useState('1');
+  const [selectedValue, setSelectedValue] = useState("1");
   const [profile, setProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [errorProfile, setErrorProfile] = useState(null);
@@ -82,6 +83,8 @@ export const UserProvider = (props) => {
   const logout = async () => {
     try {
       await signOut(auth);
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("email");
       await AsyncStorage.removeItem("id");
@@ -217,7 +220,7 @@ export const UserProvider = (props) => {
         refetchProfile: fetchProfile,
         setProfile,
         selectedValue,
-        setSelectedValue
+        setSelectedValue,
       }}
     >
       {props.children}

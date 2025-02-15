@@ -1,19 +1,19 @@
-import React, { useContext } from 'react'
-import { View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import UserContext from '../../../context/User'
-import ThemeContext from '../../../ui/ThemeContext/ThemeContext'
-import { theme } from '../../../utils/themeColors'
-import styles from './styles'
-import TextDefault from '../../Text/TextDefault/TextDefault'
-import { alignment } from '../../../utils/alignment'
+import React, { useContext } from "react";
+import { View, Image } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import UserContext from "../../../context/User";
+import ThemeContext from "../../../ui/ThemeContext/ThemeContext";
+import { theme } from "../../../utils/themeColors";
+import styles from "./styles";
+import TextDefault from "../../Text/TextDefault/TextDefault";
+import { alignment } from "../../../utils/alignment";
 
 function DrawerProfile(props) {
-  const themeContext = useContext(ThemeContext)
-  const currentTheme = theme['Dark']
-  const { isLoggedIn, loadingProfile, profile } = useContext(UserContext)
+  const themeContext = useContext(ThemeContext);
+  const currentTheme = theme["Dark"];
+  const { isLoggedIn, loadingProfile, profile } = useContext(UserContext);
 
-  if (loadingProfile) return <TextDefault>Loading...</TextDefault>
+  if (loadingProfile) return <TextDefault>Loading...</TextDefault>;
   return (
     <View style={styles(currentTheme).mainContainer}>
       {!isLoggedIn && (
@@ -21,8 +21,9 @@ function DrawerProfile(props) {
           <TouchableOpacity
             style={{ ...alignment.PTxSmall, ...alignment.PBxSmall }}
             onPress={() => {
-              props.navigation.navigate({ name: 'SignIn' })
-            }}>
+              props.navigation.navigate({ name: "SignIn" });
+            }}
+          >
             <TextDefault textColor={currentTheme.fontWhite} bold H5>
               Login/Create Account
             </TextDefault>
@@ -32,11 +33,18 @@ function DrawerProfile(props) {
       <View style={styles().loggedInContainer}>
         {isLoggedIn && profile && (
           <View style={styles().subContainer}>
-            <View style={styles(currentTheme).imgContainer}>
-              <TextDefault textColor={currentTheme.tagColor} bold H1>
-                {profile.name.substr(0, 1).toUpperCase()}
-              </TextDefault>
-            </View>
+            {profile.photo ? (
+              <Image
+                source={{ uri: profile.photo }}
+                style={styles(currentTheme).imgContainer}
+              />
+            ) : (
+              <View style={styles(currentTheme).imgContainer}>
+                <TextDefault textColor={currentTheme.tagColor} bold H1>
+                  {profile.name.substr(0, 1).toUpperCase()}
+                </TextDefault>
+              </View>
+            )}
             <TextDefault textColor={currentTheme.fontWhite} bold H5>
               {profile.name}
             </TextDefault>
@@ -44,7 +52,7 @@ function DrawerProfile(props) {
         )}
       </View>
     </View>
-  )
+  );
 }
 
-export default DrawerProfile
+export default DrawerProfile;
