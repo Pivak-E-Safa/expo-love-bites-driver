@@ -56,10 +56,9 @@ function Main() {
   }, []);
 
   function onEnter() {
-    navigation.navigate("DrawerNavigator", {
-      screen: "RestaurantDetails",
-      params: { id: selectedValue },
-    });
+    navigation.navigate('RestaurantDetails', {
+      id: selectedValue
+    })
   }
 
   if (loading)

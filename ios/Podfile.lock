@@ -223,7 +223,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoAdapterGoogleSignIn (13.1.0):
+  - ExpoAdapterGoogleSignIn (13.2.0):
     - ExpoModulesCore
     - GoogleSignIn (~> 7.1)
     - React-Core
@@ -1519,6 +1519,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-maps (1.20.1):
+    - React-Core
   - react-native-safe-area-context (5.0.0):
     - DoubleConversion
     - glog
@@ -1896,7 +1898,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNGoogleSignin (13.1.0):
+  - RNGoogleSignin (13.2.0):
     - DoubleConversion
     - glog
     - GoogleSignIn (~> 7.1)
@@ -2197,6 +2199,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
+  - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2358,6 +2361,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-nativeconfig:
@@ -2448,7 +2453,7 @@ SPEC CHECKSUMS:
   expo-dev-launcher: 47bf96735a20f13318306bc95b65857b0c077b68
   expo-dev-menu: df662d3b7e26fb9926ea8439da64f62ee45997f5
   expo-dev-menu-interface: 4baf2f8b3b79ce37cf4b900e4b3ba6df3384f0a1
-  ExpoAdapterGoogleSignIn: da10ae7e7c1d73a10c2facebcdfe5ebea8e073ce
+  ExpoAdapterGoogleSignIn: 2b9d8c002ae5d09042b2fc87448dfc070d0e7a08
   ExpoAsset: 8138f2a9ec55ae1ad7c3871448379f7d97692d15
   ExpoCrypto: 8465f71eb3798c194c0a509d4a76e5c429656d83
   ExpoFileSystem: 179a0661fd6d3c4e5d7e500a99a9cd8b295d9566
@@ -2496,6 +2501,7 @@ SPEC CHECKSUMS:
   React-logger: 697873f06b8ba436e3cddf28018ab4741e8071b6
   React-Mapbuffer: c174e11bdea12dce07df8669d6c0dc97eb0c7706
   React-microtasksnativemodule: 8a80099ad7391f4e13a48b12796d96680f120dc6
+  react-native-maps: ee1e65647460c3d41e778071be5eda10e3da6225
   react-native-safe-area-context: d6406c2adbd41b2e09ab1c386781dc1c81a90919
   React-nativeconfig: f7ab6c152e780b99a8c17448f2d99cf5f69a2311
   React-NativeModulesApple: 70600f7edfc2c2a01e39ab13a20fd59f4c60df0b
@@ -2527,7 +2533,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: a927b768986f83467b635cf6d7559e6edb46db7a
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: 0e5ae8d72ef4afb855e98dcdbe60f27d938abe13
-  RNGoogleSignin: edec18754ff4af2cfee46072609ec5a7a754291a
+  RNGoogleSignin: 84aa86accafa34b50a78bc561b0f483ff09c1a91
   RNLocalize: c28a383fb73b1480d1117c3ca4402113e1772366
   RNReanimated: 56fffbede49b5bddb327616096e822f342978794
   RNScreens: d022507f2b6d76c73335e9e35aedcf7bb2f791b0

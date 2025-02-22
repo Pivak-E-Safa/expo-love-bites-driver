@@ -9,6 +9,7 @@ import UserContext from "../context/User";
 import Main from "../screens/Main/Main";
 import SignIn from "../screens/SignIn/SignIn";
 import RestaurantDetails from "../screens/RestaurantDetails/RestaurantDetails";
+import About from "../screens/About";
 import ItemDetail from "../screens/ItemDetail/ItemDetail";
 import Restaurant from "../screens/Restaurant/Restaurant";
 import { setUser, getUserByEmail } from "../firebase/profile";
@@ -40,13 +41,6 @@ function DrawerNavigator() {
       screenOptions={{ headerShown: false }}
     >
       <Drawer.Screen name="Main" component={Main} />
-      <Drawer.Screen name="RestaurantDetails" component={RestaurantDetails} />
-      <Drawer.Screen name="ItemDetail" component={ItemDetail} />
-      <Drawer.Screen
-        name="Restaurant"
-        component={Restaurant}
-        options={{ header: () => null }}
-      />
     </Drawer.Navigator>
   );
 }
@@ -91,9 +85,12 @@ function AppNavigator() {
           };
           if (existingUser === null) {
             await setUser(data);
-            setProfile({...data, phoneIsVerified: false});
+            setProfile({ ...data, phoneIsVerified: false });
           } else {
-            setProfile({...data, phoneIsVerified: existingUser?.phoneIsVerified});
+            setProfile({
+              ...data,
+              phoneIsVerified: existingUser?.phoneIsVerified,
+            });
           }
           await setEmailAsync(user.email);
           await setIdAsync(user.id);
@@ -133,7 +130,22 @@ function AppNavigator() {
       ) : (
         <>
           <Stack.Screen name="Main" component={Main} />
+          <Drawer.Screen
+            name="RestaurantDetails"
+            component={RestaurantDetails}
+          />
+          <Drawer.Screen name="ItemDetail" component={ItemDetail} />
           <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+          <Drawer.Screen
+            name="Restaurant"
+            component={Restaurant}
+            options={{ header: () => null }}
+          />
+          <Drawer.Screen
+            name="About"
+            component={About}
+            options={{ header: () => null }}
+          />
         </>
       )}
     </Stack.Navigator>

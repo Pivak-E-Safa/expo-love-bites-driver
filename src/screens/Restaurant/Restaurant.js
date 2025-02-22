@@ -317,19 +317,6 @@ function Restaurant(props) {
     "clamp"
   )}%`;
 
-  const circleSize = interpolate(
-    circle,
-    [0, 0.5, 1],
-    [scale(18), scale(24), scale(18)],
-    "clamp"
-  );
-  const radiusSize = interpolate(
-    circle,
-    [0, 0.5, 1],
-    [scale(9), scale(12), scale(9)],
-    "clamp"
-  );
-
   // if (loading) {
   //   return (
   //     <Animated.View
@@ -597,7 +584,9 @@ function Restaurant(props) {
             }}
           />
           {cartCount > 0 && (
-            <Animated.View style={styles(currentTheme).buttonContainer}>
+            <Animated.View 
+            style={styles(currentTheme).buttonContainer}
+            >
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={styles(currentTheme).button}
@@ -608,9 +597,9 @@ function Restaurant(props) {
                     style={[
                       styles(currentTheme).buttonLeftCircle,
                       {
-                        width: circleSize,
-                        height: circleSize,
-                        borderRadius: radiusSize,
+                        width: 24,
+                        height: 24,
+                        borderRadius: '50%',
                         backgroundColor: currentTheme.themeBackgroundIcons,
                       },
                     ]}
@@ -626,7 +615,6 @@ function Restaurant(props) {
                   </Animated.View>
                 </Animated.View>
                 <TextDefault
-                  style={styles().buttonText}
                   textColor={currentTheme.buttonTextPink}
                   uppercase
                   center
