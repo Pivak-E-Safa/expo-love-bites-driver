@@ -12,10 +12,10 @@ const styles = (props = null) => {
       borderBottomColor: props !== null ? props.horizontalLine : 'transparent'
     },
     botContainer: {
-      ...alignment.MTsmall
+      ...alignment.MTlarge
     },
     item: {
-      height: '12%',
+      height: '13%',
       ...alignment.MBxsmall
     }
   })

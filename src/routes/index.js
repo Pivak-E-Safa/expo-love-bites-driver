@@ -12,6 +12,11 @@ import RestaurantDetails from "../screens/RestaurantDetails/RestaurantDetails";
 import About from "../screens/About";
 import ItemDetail from "../screens/ItemDetail/ItemDetail";
 import Restaurant from "../screens/Restaurant/Restaurant";
+import MyOrders from "../screens/MyOrders/MyOrders";
+import Cart from "../screens/Cart/Cart";
+import Profile from "../screens/Profile/Profile";
+import Addresses from "../screens/Addresses/Addresses";
+import NewAddress from "../screens/NewAddress/NewAddress";
 import { setUser, getUserByEmail } from "../firebase/profile";
 import AuthContext from "../context/Auth";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
@@ -31,21 +36,74 @@ GoogleSignin.configure({
     "478147632680-du93puo7pbkdjmdtrahhqergbu1l5plq.apps.googleusercontent.com",
 });
 
-const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
+const NavigationStack = createStackNavigator();
+const MainStack = createStackNavigator();
+const SideDrawer = createDrawerNavigator();
+const Location = createStackNavigator();
 
-function DrawerNavigator() {
+function Drawer() {
   return (
-    <Drawer.Navigator
-      drawerContent={(props) => <SideBar {...props} />}
-      screenOptions={{ headerShown: false }}
-    >
-      <Drawer.Screen name="Main" component={Main} />
-    </Drawer.Navigator>
+    <SideDrawer.Navigator drawerContent={(props) => <SideBar {...props} />}>
+      <SideDrawer.Screen
+        options={{ headerShown: false }}
+        name="NoDrawer"
+        component={NoDrawer}
+      />
+      <SideDrawer.Screen
+        options={{ headerShown: false }}
+        name="MyOrders"
+        component={MyOrders}
+      />
+      <NavigationStack.Screen name="Profile" component={Profile} />
+      <NavigationStack.Screen name="Addresses" component={Addresses} />
+      <NavigationStack.Screen name="NewAddress" component={NewAddress} />
+    </SideDrawer.Navigator>
   );
 }
 
-function AppNavigator() {
+function NoDrawer() {
+  // const themeContext = useContext(ThemeContext);
+  // const currentTheme = theme[themeContext.ThemeValue];
+  return (
+    <NavigationStack.Navigator screenOptions={{ headerShown: false }}>
+      <NavigationStack.Screen
+        name="Main"
+        component={Main}
+        options={{ header: () => null }}
+      />
+      <NavigationStack.Screen
+        name="Restaurant"
+        component={Restaurant}
+        options={{ header: () => null }}
+      />
+      <NavigationStack.Screen
+        name="RestaurantDetails"
+        component={RestaurantDetails}
+        options={{ header: () => null }}
+      />
+      {
+        <NavigationStack.Screen
+          name="ItemDetail"
+          component={ItemDetail}
+          options={{ header: () => null }}
+        />
+      }
+      <NavigationStack.Screen name="Cart" component={Cart} />
+      <NavigationStack.Screen name="NewAddress" component={NewAddress} />
+      <NavigationStack.Screen name="MyOrders" component={MyOrders} />
+      <NavigationStack.Screen name="Profile" component={Profile} />
+      <NavigationStack.Screen name="Addresses" component={Addresses} />
+      <NavigationStack.Screen
+        name="About"
+        component={About}
+        options={{ header: () => null }}
+      />
+      <NavigationStack.Screen name="SignIn" component={SignIn} />
+    </NavigationStack.Navigator>
+  );
+}
+
+function AppContainer() {
   const { isLoggedIn } = useContext(UserContext);
   const { email, setIdAsync, setTokenAsync, setEmailAsync } =
     useContext(AuthContext);
@@ -122,46 +180,32 @@ function AppNavigator() {
   };
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {!isLoggedIn ? (
-        <Stack.Screen name="SignIn">
-          {(props) => <SignIn {...props} promptAsync={signIn} />}
-        </Stack.Screen>
-      ) : (
-        <>
-          <Stack.Screen name="Main" component={Main} />
-          <Drawer.Screen
-            name="RestaurantDetails"
-            component={RestaurantDetails}
-          />
-          <Drawer.Screen name="ItemDetail" component={ItemDetail} />
-          <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
-          <Drawer.Screen
-            name="Restaurant"
-            component={Restaurant}
-            options={{ header: () => null }}
-          />
-          <Drawer.Screen
-            name="About"
-            component={About}
-            options={{ header: () => null }}
-          />
-        </>
-      )}
-    </Stack.Navigator>
-  );
-}
-
-export default function AppContainer() {
-  return (
     <SafeAreaProvider>
       <NavigationContainer
         ref={(ref) => {
           navigationService.setGlobalRef(ref);
         }}
       >
-        <AppNavigator />
+        <MainStack.Navigator
+          initialRouteName={isLoggedIn ? "Drawer" : "SignIn"}
+        >
+          {isLoggedIn ? (
+            <MainStack.Screen
+              name="Drawer"
+              component={Drawer}
+              options={{ headerShown: false }}
+            />
+          ) : (
+            <>
+              <MainStack.Screen name="SignIn" options={{ headerShown: false }}>
+                {(props) => <SignIn {...props} promptAsync={signIn} />}
+              </MainStack.Screen>
+            </>
+          )}
+        </MainStack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
 }
+
+export default AppContainer;

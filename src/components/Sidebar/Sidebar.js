@@ -27,12 +27,6 @@ const datas = [
     navigateTo: 'Addresses',
     isAuth: true
   },
-  {
-    title: 'titleChat',
-    icon: 'bubble',
-    navigateTo: 'Chat',
-    isAuth: false
-  }
 ]
 
 function SidebBar(props) {
@@ -46,7 +40,6 @@ function SidebBar(props) {
         styles().flex,
         {
           justifyContent: 'space-between',
-          paddingBottom: inset.bottom,
           backgroundColor: currentTheme.themeBackground
         }
       ]}>
@@ -76,7 +69,6 @@ function SidebBar(props) {
                 onPress={async() => {
                   // await Analytics.track(Analytics.events.USER_LOGGED_OUT)
                   // await Analytics.identify(null, null)
-
                   logout();
                   props.navigation.closeDrawer();
                 }}

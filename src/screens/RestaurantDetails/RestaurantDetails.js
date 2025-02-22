@@ -176,9 +176,9 @@ function RestaurantDetails(props) {
               paddingTop: '40%',
               marginTop: '30%'
             }}>
-            <ImageSlider
+            {/* <ImageSlider
               images={restaurantImages}
-            />
+            /> */}
 
             <View style={styles().bottomContainerParent}>
               <TouchableOpacity

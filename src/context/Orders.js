@@ -27,12 +27,10 @@ export const OrdersProvider = ({ children }) => {
 
   const subscribeOrders = async () => {
     try {
-      // const ordersList = await fetchOrdersByUserId(profile.id);
-      // setOrders(ordersList)
-      // setLoadingOrders(false)
-
-      // TODO: ^ uncomment that
-      // setUnsubscribeOrders(() => unsubscribe)
+      console.log(profile.id)
+      const ordersList = await fetchOrdersByUserId(profile.id);
+      setOrders(ordersList)
+      setLoadingOrders(false)
     } catch (error) {
       console.log('Error setting up orders subscription:', error.message)
       setErrorOrders(error.message)

@@ -82,9 +82,6 @@ export const UserProvider = (props) => {
 
   const logout = async () => {
     try {
-      await signOut(auth);
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("email");
       await AsyncStorage.removeItem("id");
@@ -100,6 +97,9 @@ export const UserProvider = (props) => {
           deliveryAddress: location.deliveryAddress,
         });
       }
+      await signOut(auth);
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
     } catch (error) {
       console.log("error on logout", error);
     }
