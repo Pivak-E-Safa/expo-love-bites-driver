@@ -22,7 +22,8 @@ const restaurants = [
     whatsappNumber: '0315 0331462',
     openingTimes: { startTime: [0, 0], endTime: [23, 59], title: '1:00PM - 1:00AM' },
     location: { latitude: 31.730152279082226, longitude: 72.9811285828689 },
-    address: 'Sargodha Road, Chiniot'
+    address: 'Sargodha Road, Chiniot',
+    deliveryCharges: 150,
   },
   {
     id: '2',
@@ -44,9 +45,9 @@ const restaurants = [
     contactNumber: '048 3768182',
     whatsappNumber: '0326 0768182',
     openingTimes: { startTime: [0, 0], endTime: [23, 59], title: '12:00PM - 12:00AM' },
-
     location: { latitude: 31.730152279082226, longitude: 72.9811285828689 },
-    address: 'Sargodha Road, Chiniot'
+    address: 'Sargodha Road, Chiniot',
+    deliveryCharges: 150,
   },
   {
     id: '3',
@@ -69,7 +70,8 @@ const restaurants = [
     whatsappNumber: '0326 0768182',
     openingTimes: { startTime: [0, 0], endTime: [23, 59], title: '1:00PM - 1:00AM' },
     location: { latitude: 31.730152279082226, longitude: 72.9811285828689 },
-    address: 'Sargodha Road, Chiniot'
+    address: 'Sargodha Road, Chiniot',
+    deliveryCharges: 150,
   }
 ]
 

@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import UserContext, { UserProvider } from "../../context/User";
+import { LocationContext } from '../../context/Location'
 import styles from "./styles";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { theme } from "../../utils/themeColors";
@@ -15,6 +16,7 @@ import { fetchRestaurantList } from "../../firebase/restaurants";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Dropdown } from "react-native-element-dropdown";
 import { fontStyles } from "../../utils/fontStyles";
+import { useLocation } from '../../ui/hooks'
 
 function Main() {
   const [loading, setLoading] = React.useState(false);
@@ -24,6 +26,9 @@ function Main() {
   const [restaurantsData, setRestaurantsData] = useState([]);
   const gif = require("../../assets/GIF/home.gif");
   const [restaurants, setRestaurants] = useState([]);
+  const { location, setLocation } = useContext(LocationContext);
+  const { getCurrentLocation } = useLocation();
+
 
   const error = null;
   const mutationLoading = false;
@@ -53,6 +58,23 @@ function Main() {
 
   useEffect(() => {
     getRestaurants();
+  }, []);
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      const { error, coords } = await getCurrentLocation();
+      if (error) {
+        Alert.alert('Permission Denied', 'Location access is required for this app to work properly.');
+      } else {
+        setLocation({
+          label: 'Current Location',
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          deliveryAddress: 'Current Location',
+        });
+      }
+    };
+    fetchLocation();
   }, []);
 
   function onEnter() {

@@ -250,15 +250,15 @@ function Cart(props) {
     // if (paymentMethod.payment === 'COD') {
     await subscribeOrders();
     await clearCart();
-    props.navigation.reset({
-      routes: [
-        { name: "Main" },
-        {
-          name: "OrderDetail",
-          params: { id: orderId, restaurantId: cartRestaurant },
-        },
-      ],
-    });
+    // props.navigation.reset({
+    //   routes: [
+    //     { name: "Main" },
+    //     {
+    //       name: "OrderDetail",
+    //       params: { id: orderId, restaurantId: cartRestaurant },
+    //     },
+    //   ],
+    // });
   }
   function onError(error) {
     console.log("onError", error);
@@ -396,21 +396,15 @@ function Cart(props) {
       orderStatus: "PENDING",
       total: calculateTotal(),
       number: profile.phone,
-      deliveryCharges: data.restaurant.deliveryCharges,
+      deliveryCharges: data.restaurant.deliveryCharges ?? 0,
     };
 
-    console.log('2222HEREEEE')
-    console.log(orderData)
 
     const itemsData = transformOrder(cart);
 
-    console.log('4444HEREEEE')
-    console.log(location);
-
-
     const addressData = {
       label: location.label,
-      address: location.deliveryAddress,
+      deliveryAddress: location.deliveryAddress,
       details: location.details,
       // location: [location.latitude, location.longitude],
       location: new GeoPoint(
@@ -418,7 +412,7 @@ function Cart(props) {
         73.00329238299295
       ),
     };
-    console.log('5555HEREEEE')
+
     const orderId = await placeAnOrder(orderData, itemsData, addressData);
     onCompleted(orderId);
   }
@@ -916,7 +910,7 @@ function Cart(props) {
                         activeOpacity={0.7}
                         style={styles().pB10}
                         onPress={(event) => {
-                          if (!profile.addresses.length) {
+                          if (!profile?.addresses.length) {
                             props.navigation.navigate("NewAddress", {
                               backScreen: "Cart",
                             });

@@ -28,7 +28,10 @@ async function getUserByEmail(email) {
     });
 
     if (userData) {
-      const addressesRef = collection(firestore, `users/${userData.id}/addresses`);
+      const addressesRef = collection(
+        firestore,
+        `users/${userData.id}/addresses`
+      );
       const addressesSnapshot = await getDocs(addressesRef);
 
       let addresses = [];
@@ -47,7 +50,11 @@ async function getUserByEmail(email) {
 }
 
 // Function to update user profile by email
-async function updateUserProfileByEmail(email, updatedProfileData, updatePhoneIsVerified) {
+async function updateUserProfileByEmail(
+  email,
+  updatedProfileData,
+  updatePhoneIsVerified
+) {
   try {
     const usersRef = collection(firestore, "users");
     const q = query(usersRef, where("email", "==", email));
@@ -80,9 +87,15 @@ async function updateUserProfileByEmail(email, updatedProfileData, updatePhoneIs
 
       // Fetch the updated user document
       const updatedUserSnapshot = await getDoc(userDocRef);
-      const updatedUserData = { id: updatedUserSnapshot.id, ...updatedUserSnapshot.data() };
+      const updatedUserData = {
+        id: updatedUserSnapshot.id,
+        ...updatedUserSnapshot.data(),
+      };
 
-      console.log("Updated User Profile:", JSON.stringify(updatedUserData, null, 2));
+      console.log(
+        "Updated User Profile:",
+        JSON.stringify(updatedUserData, null, 2)
+      );
       return updatedUserData;
     } else {
       console.log("User document ID not found.");
@@ -107,4 +120,28 @@ async function setUser(userData) {
   }
 }
 
-export { getUserByEmail, updateUserProfileByEmail, setUser };
+async function addAddressToUser(email, newAddress) {
+  try {
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+      console.log("User not found.");
+      return { success: false, message: "User not found" };
+    }
+
+    const addressesRef = collection(firestore, `users/${user.id}/addresses`);
+    const docRef = await addDoc(addressesRef, newAddress);
+
+    console.log("Address added with ID: ", docRef.id);
+    return {
+      success: true,
+      message: "Address added successfully",
+      addressId: docRef.id,
+    };
+  } catch (error) {
+    console.error("Error adding address: ", error);
+    return { success: false, message: "Error adding address" };
+  }
+}
+
+export { getUserByEmail, updateUserProfileByEmail, setUser, addAddressToUser };

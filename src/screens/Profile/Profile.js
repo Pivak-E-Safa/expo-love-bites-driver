@@ -11,9 +11,9 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  StatusBar
+  StatusBar,
+  TextField,
 } from 'react-native'
-// import { TextField } from 'react-native-material-textfield'
 import { scale } from '../../utils/scaling'
 import i18n from '../../../i18n'
 import ChangePassword from './ChangePassword'
@@ -209,7 +209,7 @@ function Profile(props) {
                 <View style={styles().containerInfo}>
                   <View>
                     <View style={{ margin: scale(0) }}></View>
-                    {/* <TextField
+                    <TextField
                       label={i18n.t('name')}
                       ref={refName}
                       defaultValue={profile.name}
@@ -227,7 +227,7 @@ function Profile(props) {
                         paddingTop: scale(1)
                       }}
                       error={nameError}
-                    /> */}
+                    />
 
                     <View style={{ ...alignment.MTlarge }}></View>
                     <View style={{ ...alignment.MTxSmall }}>

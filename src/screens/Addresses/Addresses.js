@@ -82,7 +82,7 @@ function Addresses() {
     <>
       <View style={styles(currentTheme).containerInfo}>
         <FlatList
-          data={profile.addresses}
+          data={profile?.addresses}
           ListEmptyComponent={emptyView}
           keyExtractor={item => item.id}
           ItemSeparatorComponent={() => (
@@ -119,7 +119,7 @@ function Addresses() {
                   </View>
                   <TouchableOpacity
                     activeOpacity={0.7}
-                    disabled={loadingMutation}
+                    // disabled={loadingMutation}
                     style={styles().width10}
                     onPress={() => {
                       // mutate({ variables: { id: address.id } })

@@ -3,77 +3,79 @@ import React, {
   useRef,
   useEffect,
   useContext,
-  useLayoutEffect
-} from 'react'
+  useLayoutEffect,
+} from "react";
 import {
   View,
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
   ScrollView,
-  StyleSheet
-} from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import i18n from '../../../i18n'
-import styles from './styles'
-// import { OutlinedTextField } from 'react-native-material-textfield'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-import * as Location from 'expo-location'
-import { scale } from '../../utils/scaling'
-import ThemeContext from '../../ui/ThemeContext/ThemeContext'
-import { theme } from '../../utils/themeColors'
-import { FlashMessage } from '../../ui/FlashMessage/FlashMessage'
-import TextDefault from '../../components/Text/TextDefault/TextDefault'
-import { alignment } from '../../utils/alignment'
-import { textStyles } from '../../utils/textStyles'
-import { LocationContext } from '../../context/Location'
-import { mapStyle } from '../../utils/mapStyle'
-import CustomMarker from '../../assets/SVG/imageComponents/CustomMarker'
-import SearchModal from '../../components/Address/SearchModal'
-import AddressText from '../../components/Address/AddressText'
+  StyleSheet,
+  TextInput,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import i18n from "../../../i18n";
+import styles from "./styles";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import * as Location from "expo-location";
+import { scale } from "../../utils/scaling";
+import ThemeContext from "../../ui/ThemeContext/ThemeContext";
+import { theme } from "../../utils/themeColors";
+import { FlashMessage } from "../../ui/FlashMessage/FlashMessage";
+import TextDefault from "../../components/Text/TextDefault/TextDefault";
+import { alignment } from "../../utils/alignment";
+import { textStyles } from "../../utils/textStyles";
+import { LocationContext } from "../../context/Location";
+import { mapStyle } from "../../utils/mapStyle";
+import CustomMarker from "../../assets/SVG/imageComponents/CustomMarker";
+import AddressText from "../../components/Address/AddressText";
+import { addAddressToUser } from '../../firebase/profile';
+import UserContext from '../../context/User'
+import { GeoPoint } from "firebase/firestore";
 // import Analytics from '../../utils/analytics'
 
 const labelValues = [
   {
-    title: 'Home',
-    value: 'Home'
+    title: "Home",
+    value: "Home",
   },
   {
-    title: 'Work',
-    value: 'Work'
+    title: "Work",
+    value: "Work",
   },
   {
-    title: 'Other',
-    value: 'Other'
-  }
-]
+    title: "Other",
+    value: "Other",
+  },
+];
 
-const LATITUDE = 33.7001019
-const LONGITUDE = 72.9735978
-const LATITUDE_DELTA = 0.0022
-const LONGITUDE_DELTA = 0.0021
+const LATITUDE = 33.7001019;
+const LONGITUDE = 72.9735978;
+const LATITUDE_DELTA = 0.0022;
+const LONGITUDE_DELTA = 0.0021;
 
 function NewAddress(props) {
-  const addressRef = useRef()
-  const inset = useSafeAreaInsets()
-  const [modalVisible, setModalVisible] = useState(false)
-  const location = props.route.params ? props.route.params.location : null
-  const { setLocation } = useContext(LocationContext)
-  const [deliveryAddress, setDeliveryAddress] = useState('')
-  const [deliveryDetails, setDeliveryDetails] = useState('')
-  const [deliveryAddressError, setDeliveryAddressError] = useState('')
-  const [deliveryDetailsError, setDeliveryDetailsError] = useState('')
-  const [selectedLabel, setSelectedLabel] = useState(labelValues[0].value)
+  const addressRef = useRef();
+  const inset = useSafeAreaInsets();
+  const location = props.route.params ? props.route.params.location : null;
+  const { setLocation } = useContext(LocationContext);
+  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [deliveryDetails, setDeliveryDetails] = useState("");
+  const [deliveryAddressError, setDeliveryAddressError] = useState("");
+  const [deliveryDetailsError, setDeliveryDetailsError] = useState("");
+  const [selectedLabel, setSelectedLabel] = useState(labelValues[0].value);
+  const { profile } = useContext(UserContext);
   const [region, setRegion] = useState({
     latitude: location ? location.latitude : LATITUDE,
     latitudeDelta: LATITUDE_DELTA,
     longitude: location ? location.longitude : LONGITUDE,
-    longitudeDelta: LONGITUDE_DELTA
-  })
+    longitudeDelta: LONGITUDE_DELTA,
+  });
 
-  const regionObj = props.route.params ? props.route.params.regionChange : null
-  const themeContext = useContext(ThemeContext)
-  const currentTheme = theme[themeContext.ThemeValue]
+  const regionObj = props.route.params ? props.route.params.regionChange : null;
+  const themeContext = useContext(ThemeContext);
+  const currentTheme = theme[themeContext.ThemeValue];
   // useEffect(() => {
   //   async function Track() {
   //     await Analytics.track(Analytics.events.NAVIGATE_TO_NEWADDRESS)
@@ -83,14 +85,18 @@ function NewAddress(props) {
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerRight: null,
-      title: i18n.t('addAddress')
-    })
-  }, [props.navigation])
+      title: i18n.t("addAddress"),
+    });
+  }, [props.navigation]);
 
   useEffect(() => {
-    if (!regionObj) return regionChange(region)
-    regionChange(regionObj)
-  }, [regionObj])
+    if (!regionObj) return regionChange(region);
+    regionChange(regionObj);
+  }, [regionObj]);
+
+  useEffect(() => {
+    regionChange(region);
+  }, [region]);
 
   // const [mutate, { loading }] = useMutation(CREATE_ADDRESS, {
   //   onCompleted,
@@ -100,114 +106,99 @@ function NewAddress(props) {
   function regionChange(region) {
     Location.reverseGeocodeAsync({
       latitude: region.latitude,
-      longitude: region.longitude
+      longitude: region.longitude,
     })
-      .then(data => {
+      .then((data) => {
         if (data.length) {
-          const location = data[0]
+          const location = data[0];
           const deliveryAddress = Object.keys(location)
-            .map(key => location[key])
-            .join(' ')
-          setDeliveryAddress(deliveryAddress)
-          setRegion(region)
-          addressRef.current.setValue(deliveryAddress)
-        } else console.log('location not recognized')
+            .map((key) => location[key])
+            .join(" ");
+          setDeliveryAddress(deliveryAddress);
+          setRegion(region);
+          // addressRef.current.setValue(deliveryAddress);
+        } else console.log("location not recognized");
       })
-      .catch(error => {
-        console.log('Error : regionChange', error)
-      })
+      .catch((error) => {
+        console.log("Error : regionChange", error);
+      });
   }
 
   function onCompleted(data) {
     FlashMessage({
-      message: 'Address added'
-    })
-    const address = data.createAddress.addresses.find(a => a.selected)
-    const cartAddress = props.route.params?.backScreen || null
+      message: "Address added",
+    });
+    const address = data.createAddress.addresses.find((a) => a.selected);
+    const cartAddress = props.route.params?.backScreen || null;
     setLocation({
       ...address,
       latitude: parseFloat(address.location.latitude),
-      longitude: parseFloat(address.location.longitude)
-    })
-    if (cartAddress === 'Cart') {
-      props.navigation.navigate('Cart')
-    } else props.navigation.goBack()
+      longitude: parseFloat(address.location.longitude),
+    });
+    if (cartAddress === "Cart") {
+      props.navigation.navigate("Cart");
+    } else props.navigation.goBack();
   }
 
   function onError(error) {
-    console.log(error)
+    console.log(error);
     FlashMessage({
-      message: `An error occured. Please try again. ${error}`
-    })
-  }
-
-  const onOpen = () => {
-    setModalVisible(true)
-  }
-  const onClose = () => {
-    setModalVisible(false)
+      message: `An error occured. Please try again. ${error}`,
+    });
   }
 
   const onSubmit = (deliveryAddressGeo, coordinates) => {
-    setDeliveryAddress(deliveryAddressGeo)
-    addressRef.current.setValue(deliveryAddressGeo)
+    setDeliveryAddress(deliveryAddressGeo);
+    // addressRef.current.setValue(deliveryAddressGeo);
     setRegion({
       ...region,
       longitude: coordinates.lng,
-      latitude: coordinates.lat
-    })
-    setModalVisible(false)
-  }
+      latitude: coordinates.lat,
+    });
+  };
 
   return (
     <>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'android' ? 20 : 0}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "android" ? 20 : 0}
         style={styles().flex}
-        enabled={!modalVisible}>
+      >
         <View style={styles().flex}>
           <View style={styles().mapContainer}>
             <MapView
               style={styles().flex}
-              scrollEnabled={false}
-              zoomEnabled={false}
-              zoomControlEnabled={false}
-              rotateEnabled={false}
-              cacheEnabled={true}
-              showsUserLocation={false}
+              onRegionChangeComplete={setRegion}
+              showsUserLocation={true}
+              showsMyLocationButton={true}
+              myLocationEnabled={true}
+              // provider={PROVIDER_GOOGLE}
               customMapStyle={
-                themeContext.ThemeValue === 'Dark' ? mapStyle : null
+                themeContext.ThemeValue === "Dark" ? mapStyle : null
               }
               initialRegion={{
                 latitude: LATITUDE,
                 latitudeDelta: LATITUDE_DELTA,
                 longitude: LONGITUDE,
-                longitudeDelta: LONGITUDE_DELTA
+                longitudeDelta: LONGITUDE_DELTA,
               }}
               region={region}
-              provider={PROVIDER_GOOGLE}
-              onPress={() => {
-                props.navigation.navigate('FullMap', {
-                  latitude: region.latitude,
-                  longitude: region.longitude,
-                  currentScreen: 'NewAddress'
-                })
-              }}></MapView>
+            ></MapView>
             <View
               style={{
                 width: 50,
                 height: 50,
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
+                position: "absolute",
+                top: "50%",
+                left: "50%",
                 zIndex: 1,
                 translateX: -25,
                 translateY: -25,
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: [{ translateX: -25 }, { translateY: -25 }]
-              }}>
+                justifyContent: "center",
+                alignItems: "center",
+                transform: [{ translateX: -25 }, { translateY: -25 }],
+              }}
+            >
               <CustomMarker
                 width={40}
                 height={40}
@@ -220,91 +211,83 @@ function NewAddress(props) {
           <ScrollView
             style={styles().flex}
             contentContainerStyle={{ flexGrow: 1 }}
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}
+          >
             <View style={styles(currentTheme).subContainer}>
               <View style={styles().upperContainer}>
                 <View style={styles().addressContainer}>
-                  <View style={styles().geoLocation}>
-                    <View style={{ width: '90%' }}>
-                      {/* <OutlinedTextField // TODO: Replace with some other textfield library
-                        error={deliveryAddressError}
-                        ref={addressRef}
-                        value={deliveryAddress}
-                        label={i18n.t('fullDeliveryAddress')}
-                        labelFontSize={scale(8)}
-                        fontSize={scale(10)}
-                        lineWidth={StyleSheet.hairlineWidth}
-                        activeLineWidth={StyleSheet.hairlineWidth}
-                        maxLength={100}
-                        textColor={currentTheme.fontMainColor}
-                        baseColor={currentTheme.fontSecondColor}
-                        errorColor={currentTheme.textErrorColor}
-                        tintColor={
-                          !deliveryAddressError
-                            ? currentTheme.fontMainColor
-                            : 'red'
-                        }
-                        labelTextStyle={{
-                          ...textStyles.Normal,
-                          paddingTop: scale(1)
-                        }}
-                        onChangeText={text => {
-                          setDeliveryAddress(text)
-                        }}
-                        onBlur={() => {
-                          setDeliveryAddressError(
-                            !deliveryAddress.trim().length
-                              ? 'Delivery address is required'
-                              : null
-                          )
-                        }}
-                      /> */}
-                    </View>
-                    <AddressText
-                      deliveryAddress={deliveryAddress}
-                      onPress={onOpen}
+                <View style={{ ...alignment.MTsmall }}>
+                    <TextInput
+                      style={{
+                        borderWidth: 1,
+                        borderColor: currentTheme.fontSecondColor,
+                        borderRadius: 5,
+                        height: 45,
+                        padding: 10,
+                        color: currentTheme.fontMainColor,
+                      }}
+                      placeholder={i18n.t("fullDeliveryAddress")}
+                      placeholderTextColor={currentTheme.fontSecondColor}
+                      value={deliveryAddress}
+                      onChangeText={setDeliveryAddress}
+                      // label={i18n.t('fullDeliveryAddress')}
+                      //   labelFontSize={scale(8)}
+                      //   fontSize={scale(10)}
+                      //   lineWidth={StyleSheet.hairlineWidth}
+                      //   activeLineWidth={StyleSheet.hairlineWidth}
+                      //   maxLength={100}
+                      //   textColor={currentTheme.fontMainColor}
+                      //   baseColor={currentTheme.fontSecondColor}
+                      //   errorColor={currentTheme.textErrorColor}
+                      //   tintColor={
+                      //     !deliveryAddressError
+                      //       ? currentTheme.fontMainColor
+                      //       : 'red'
+                      //   }
+                      //   labelTextStyle={{
+                      //     ...textStyles.Normal,
+                      //     paddingTop: scale(1)
+                      //   }}
+
+                      onBlur={() =>
+                        setDeliveryAddressError(
+                          !deliveryAddress.trim().length
+                            ? "Delivery address is required"
+                            : null
+                        )
+                      }
                     />
                   </View>
                   <View style={{ ...alignment.MTsmall }}></View>
-                  {/* <OutlinedTextField // TODO: Replace with some other textfield library
-                    error={deliveryDetailsError}
+                  <TextInput
+                    style={{
+                      borderWidth: 1,
+                      borderColor: currentTheme.fontSecondColor,
+                      borderRadius: 5,
+                      padding: 10,
+                      height: 45,
+                      color: currentTheme.fontMainColor,
+                    }}
+                    placeholder={i18n.t("deliveryDetails")}
+                    placeholderTextColor={currentTheme.fontSecondColor}
                     value={deliveryDetails}
-                    label={i18n.t('deliveryDetails')}
-                    labelFontSize={scale(8)}
-                    fontSize={scale(10)}
-                    textAlignVertical="top"
-                    multiline={false}
-                    lineWidth={StyleSheet.hairlineWidth}
-                    activeLineWidth={StyleSheet.hairlineWidth}
-                    maxLength={30}
-                    textColor={currentTheme.fontMainColor}
-                    baseColor={currentTheme.fontSecondColor}
-                    errorColor={currentTheme.textErrorColor}
-                    tintColor={
-                      !deliveryDetailsError ? currentTheme.fontMainColor : 'red'
-                    }
-                    labelTextStyle={{
-                      ...textStyles.Normal,
-                      paddingTop: scale(1)
-                    }}
-                    onChangeText={text => {
-                      setDeliveryDetails(text)
-                    }}
-                    onBlur={() => {
+                    onChangeText={setDeliveryDetails}
+                    onBlur={() =>
                       setDeliveryDetailsError(
                         !deliveryDetails.trim().length
-                          ? 'Delivery details is required'
+                          ? "Delivery details is required"
                           : null
                       )
-                    }}
-                  /> */}
+                    }
+                  />
                 </View>
                 <View style={styles().labelButtonContainer}>
                   <View style={styles().labelTitleContainer}>
                     <TextDefault
                       textColor={currentTheme.fontMainColor}
                       B700
-                      bolder>
+                      bolder
+                    >
                       Label as
                     </TextDefault>
                   </View>
@@ -319,12 +302,13 @@ function NewAddress(props) {
                             : styles(currentTheme).labelButton
                         }
                         onPress={() => {
-                          setSelectedLabel(label.value)
-                        }}>
+                          setSelectedLabel(label.value);
+                        }}
+                      >
                         <TextDefault
                           style={
                             selectedLabel === label.value && {
-                              ...textStyles.Bolder
+                              ...textStyles.Bolder,
                             }
                           }
                           textColor={
@@ -333,7 +317,8 @@ function NewAddress(props) {
                               : currentTheme.fontSecondColor
                           }
                           small
-                          center>
+                          center
+                        >
                           {label.title}
                         </TextDefault>
                       </TouchableOpacity>
@@ -346,36 +331,52 @@ function NewAddress(props) {
                 // disabled={loading}
                 onPress={() => {
                   const deliveryAddressError = !deliveryAddress.trim().length
-                    ? 'Delivery address is required'
-                    : null
+                    ? "Delivery address is required"
+                    : null;
                   const deliveryDetailsError = !deliveryDetails.trim().length
-                    ? 'Delivery details is required'
-                    : null
+                    ? "Delivery details is required"
+                    : null;
 
-                  setDeliveryAddressError(deliveryAddressError)
-                  setDeliveryDetailsError(deliveryDetailsError)
+                  setDeliveryAddressError(deliveryAddressError);
+                  setDeliveryDetailsError(deliveryDetailsError);
 
                   if (
                     deliveryAddressError === null &&
                     deliveryDetailsError === null
                   ) {
-                    mutate({
-                      variables: {
-                        addressInput: {
-                          latitude: `${region.latitude}`,
-                          longitude: `${region.longitude}`,
+
+                        const addressData = {
+                          label: selectedLabel,
                           deliveryAddress: deliveryAddress.trim(),
                           details: deliveryDetails.trim(),
-                          label: selectedLabel
-                        }
-                      }
-                    })
+                          // location: [location.latitude, location.longitude],
+                          location: new GeoPoint(
+                            region.latitude,
+                            region.longitude
+                          ),
+                        };
+                        console.log('HEREEEEEE');
+                        console.log(profile.email);
+                        console.log(addressData);
+                        addAddressToUser(profile.email, addressData)
+                    // mutate({
+                    //   variables: {
+                    //     addressInput: {
+                    //       latitude: `${region.latitude}`,
+                    //       longitude: `${region.longitude}`,
+                    //       deliveryAddress: deliveryAddress.trim(),
+                    //       details: deliveryDetails.trim(),
+                    //       label: selectedLabel,
+                    //     },
+                    //   },
+                    // });
                   }
                 }}
                 activeOpacity={0.5}
-                style={styles(currentTheme).saveBtnContainer}>
+                style={styles(currentTheme).saveBtnContainer}
+              >
                 <TextDefault textColor={currentTheme.buttonText} H4 bold>
-                  {i18n.t('saveContBtn')}
+                  {i18n.t("saveContBtn")}
                 </TextDefault>
               </TouchableOpacity>
             </View>
@@ -385,16 +386,11 @@ function NewAddress(props) {
       <View
         style={{
           paddingBottom: inset.bottom,
-          backgroundColor: currentTheme.themeBackground
+          backgroundColor: currentTheme.themeBackground,
         }}
       />
-      <SearchModal
-        visible={modalVisible}
-        onClose={onClose}
-        // onSubmit={onSubmit}
-      />
     </>
-  )
+  );
 }
 
-export default NewAddress
+export default NewAddress;

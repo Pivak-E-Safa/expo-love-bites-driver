@@ -14,14 +14,22 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ghazwairshad.lovebitesgoogle"
+      "bundleIdentifier": "com.ghazwairshad.lovebitesgoogle",
+      "config": {
+        "googleMapsApiKey": "AIzaSyAhMfwYOoPWPwsGtHCfU5XfnsJrMjjRl8A"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ghazwairshad.lovebitesgoogle"
+      "package": "com.ghazwairshad.lovebitesgoogle",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAhMfwYOoPWPwsGtHCfU5XfnsJrMjjRl8A"
+        }
+      },
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,7 +40,13 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.478147632680-du93puo7pbkdjmdtrahhqergbu1l5plq"
         }
-      ]
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $Love Bites to use your location."
+        }
+      ],
     ],
     "extra": {
       "eas": {

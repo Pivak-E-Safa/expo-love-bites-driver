@@ -176,7 +176,6 @@ export const UserProvider = (props) => {
   ) => {
     const cartItems = clearFlag ? [] : cart;
     cartItems.push({
-      key: uuid.v4(),
       ...food,
       quantity: quantity,
       variation: variation,

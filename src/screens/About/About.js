@@ -103,7 +103,7 @@ function About(props) {
           </TextDefault>
         </View>
         <View style={styles().mapContainer}>
-          {/* <MapView
+          <MapView
             style={[styles().flex, { borderRadius: 10 }]}
             initialRegion={RestAbout.map}
             scrollEnabled={false}
@@ -112,7 +112,7 @@ function About(props) {
             rotateEnabled={false}
             cacheEnabled={false}
             customMapStyle={mapStyle}
-          /> */}
+          />
           {/* <MapView
             style={[styles().flex, {borderRadius: 10}]}
             scrollEnabled={false}

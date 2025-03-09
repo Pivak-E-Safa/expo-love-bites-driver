@@ -12,6 +12,8 @@ import RestaurantDetails from "../screens/RestaurantDetails/RestaurantDetails";
 import About from "../screens/About";
 import ItemDetail from "../screens/ItemDetail/ItemDetail";
 import Restaurant from "../screens/Restaurant/Restaurant";
+import EditAddress from "../screens/EditAddress/EditAddress";
+import CartAddress from "../screens/CartAddress/CartAddress";
 import MyOrders from "../screens/MyOrders/MyOrders";
 import Cart from "../screens/Cart/Cart";
 import Profile from "../screens/Profile/Profile";
@@ -57,6 +59,8 @@ function Drawer() {
       <NavigationStack.Screen name="Profile" component={Profile} />
       <NavigationStack.Screen name="Addresses" component={Addresses} />
       <NavigationStack.Screen name="NewAddress" component={NewAddress} />
+      <NavigationStack.Screen name="EditAddress" component={EditAddress} />
+      <NavigationStack.Screen name="CartAddress" component={CartAddress} />
     </SideDrawer.Navigator>
   );
 }
@@ -90,6 +94,8 @@ function NoDrawer() {
       }
       <NavigationStack.Screen name="Cart" component={Cart} />
       <NavigationStack.Screen name="NewAddress" component={NewAddress} />
+      <NavigationStack.Screen name="EditAddress" component={EditAddress} />
+      <NavigationStack.Screen name="CartAddress" component={CartAddress} />
       <NavigationStack.Screen name="MyOrders" component={MyOrders} />
       <NavigationStack.Screen name="Profile" component={Profile} />
       <NavigationStack.Screen name="Addresses" component={Addresses} />
@@ -139,7 +145,7 @@ function AppContainer() {
             phoneIsVerified: false,
             name: user.name,
             photo: user.photo,
-            id: user.id,
+            uuid: user.id,
           };
           if (existingUser === null) {
             await setUser(data);

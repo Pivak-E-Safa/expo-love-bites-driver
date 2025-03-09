@@ -19,6 +19,7 @@ import { ConfigurationProvider } from './src/context/Configuration'
 import { OrdersProvider } from './src/context/Orders'
 import FlashMessage from 'react-native-flash-message'
 import { MessageComponent } from './src/components/FlashMessage/MessageComponent'
+import 'react-native-get-random-values';
 
 WebBrowser.maybeCompleteAuthSession();
 
