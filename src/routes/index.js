@@ -21,6 +21,7 @@ import Addresses from "../screens/Addresses/Addresses";
 import NewAddress from "../screens/NewAddress/NewAddress";
 import { setUser, getUserByEmail } from "../firebase/profile";
 import AuthContext from "../context/Auth";
+import OrderDetail from "../screens/OrderDetail/OrderDetail";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import {
@@ -55,6 +56,20 @@ function Drawer() {
         options={{ headerShown: false }}
         name="MyOrders"
         component={MyOrders}
+      />
+      <NavigationStack.Screen
+        name="OrderDetail"
+        component={OrderDetail}
+        options={{
+          headerTransparent: true,
+          headerRight: null,
+          title: "",
+          headerBackImage: () =>
+            DarkBackButton({
+              iconColor: currentTheme.backIcon,
+              iconBackground: currentTheme.backIconBackground,
+            }),
+        }}
       />
       <NavigationStack.Screen name="Profile" component={Profile} />
       <NavigationStack.Screen name="Addresses" component={Addresses} />
@@ -97,6 +112,20 @@ function NoDrawer() {
       <NavigationStack.Screen name="EditAddress" component={EditAddress} />
       <NavigationStack.Screen name="CartAddress" component={CartAddress} />
       <NavigationStack.Screen name="MyOrders" component={MyOrders} />
+      <NavigationStack.Screen
+        name="OrderDetail"
+        component={OrderDetail}
+        options={{
+          headerTransparent: true,
+          headerRight: null,
+          title: "",
+          headerBackImage: () =>
+            DarkBackButton({
+              iconColor: currentTheme.backIcon,
+              iconBackground: currentTheme.backIconBackground,
+            }),
+        }}
+      />
       <NavigationStack.Screen name="Profile" component={Profile} />
       <NavigationStack.Screen name="Addresses" component={Addresses} />
       <NavigationStack.Screen

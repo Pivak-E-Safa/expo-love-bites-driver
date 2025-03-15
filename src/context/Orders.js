@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { fetchOrdersByUserId } from '../firebase/order';
-
+import { fetchRestaurantList } from '../firebase/restaurants';
 import UserContext from './User'
 
 const OrdersContext = React.createContext()
@@ -29,6 +29,12 @@ export const OrdersProvider = ({ children }) => {
     try {
       console.log(profile.id)
       const ordersList = await fetchOrdersByUserId(profile.id);
+      const restaurantsList = await fetchRestaurantList();
+      ordersList.map(order => {
+        const restaurant = restaurantsList.find(restaurant => restaurant.id === order.restaurantId)
+        order.restaurant = restaurant;
+      }
+    )
       setOrders(ordersList)
       setLoadingOrders(false)
     } catch (error) {
