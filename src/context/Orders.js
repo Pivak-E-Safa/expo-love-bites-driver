@@ -27,7 +27,6 @@ export const OrdersProvider = ({ children }) => {
 
   const subscribeOrders = async () => {
     try {
-      console.log(profile.id)
       const ordersList = await fetchOrdersByUserId(profile.id);
       const restaurantsList = await fetchRestaurantList();
       ordersList.map(order => {

@@ -30,9 +30,10 @@ import { LocationContext } from "../../context/Location";
 import { mapStyle } from "../../utils/mapStyle";
 import CustomMarker from "../../assets/SVG/imageComponents/CustomMarker";
 import AddressText from "../../components/Address/AddressText";
-import { addAddressToUser } from '../../firebase/profile';
-import UserContext from '../../context/User'
+import { addAddressToUser } from "../../firebase/profile";
+import UserContext from "../../context/User";
 import { GeoPoint } from "firebase/firestore";
+import Ionicons from "@expo/vector-icons/Ionicons";
 // import Analytics from '../../utils/analytics'
 
 const labelValues = [
@@ -57,6 +58,7 @@ const LONGITUDE_DELTA = 0.0021;
 
 function NewAddress(props) {
   const addressRef = useRef();
+  const mapRef = useRef(null);
   const inset = useSafeAreaInsets();
   const location = props.route.params ? props.route.params.location : null;
   const { setLocation } = useContext(LocationContext);
@@ -124,6 +126,30 @@ function NewAddress(props) {
       });
   }
 
+  const handleLocateMe = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        FlashMessage({ message: "Location permission denied" });
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      const newRegion = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      };
+
+      // Update map region
+      mapRef.current?.animateToRegion(newRegion, 1000);
+      setRegion(newRegion);
+    } catch (error) {
+      console.log("Location error:", error);
+    }
+  };
+
   function onCompleted(data) {
     FlashMessage({
       message: "Address added",
@@ -167,10 +193,10 @@ function NewAddress(props) {
         <View style={styles().flex}>
           <View style={styles().mapContainer}>
             <MapView
+              ref={mapRef}
               style={styles().flex}
               onRegionChangeComplete={setRegion}
               showsUserLocation={true}
-              showsMyLocationButton={true}
               myLocationEnabled={true}
               // provider={PROVIDER_GOOGLE}
               customMapStyle={
@@ -184,6 +210,12 @@ function NewAddress(props) {
               }}
               region={region}
             ></MapView>
+            <TouchableOpacity
+              style={styles().locationButton}
+              onPress={handleLocateMe}
+            >
+              <Ionicons name="locate" size={18} color="black" />
+            </TouchableOpacity>
             <View
               style={{
                 width: 50,
@@ -216,7 +248,7 @@ function NewAddress(props) {
             <View style={styles(currentTheme).subContainer}>
               <View style={styles().upperContainer}>
                 <View style={styles().addressContainer}>
-                <View style={{ ...alignment.MTsmall }}>
+                  <View style={{ ...alignment.MTsmall }}>
                     <TextInput
                       style={{
                         borderWidth: 1,
@@ -344,21 +376,14 @@ function NewAddress(props) {
                     deliveryAddressError === null &&
                     deliveryDetailsError === null
                   ) {
-
-                        const addressData = {
-                          label: selectedLabel,
-                          deliveryAddress: deliveryAddress.trim(),
-                          details: deliveryDetails.trim(),
-                          // location: [location.latitude, location.longitude],
-                          location: new GeoPoint(
-                            region.latitude,
-                            region.longitude
-                          ),
-                        };
-                        console.log('HEREEEEEE');
-                        console.log(profile.email);
-                        console.log(addressData);
-                        addAddressToUser(profile.email, addressData)
+                    const addressData = {
+                      label: selectedLabel,
+                      deliveryAddress: deliveryAddress.trim(),
+                      details: deliveryDetails.trim(),
+                      // location: [location.latitude, location.longitude],
+                      location: new GeoPoint(region.latitude, region.longitude),
+                    };
+                    addAddressToUser(profile.email, addressData);
                     // mutate({
                     //   variables: {
                     //     addressInput: {

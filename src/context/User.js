@@ -45,12 +45,8 @@ export const UserProvider = (props) => {
   const fetchProfile = async () => {
     // setLoadingProfile(true)
     // try {
-    //   console.log('INSIDE THE USER CONTEXT111');
-    //   console.log('email')
-    //   console.log(email)
     //   const userInfo = await getUserByEmail(email);
     //   setProfile(userInfo)
-    //   console.log('INSIDE THE USER CONTEXT');
     //   onCompleted({ profile: userInfo })
     // } catch (error) {
     //   setErrorProfile(error)

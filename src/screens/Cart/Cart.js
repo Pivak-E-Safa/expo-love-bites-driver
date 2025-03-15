@@ -382,8 +382,6 @@ function Cart(props) {
     //   }
     // })
 
-    console.log('HEREEEE')
-
     const orderData = {
       paymentMethod: paymentMethod.payment,
       taxationAmount: +taxCalculation(),

@@ -19,6 +19,15 @@ const styles = (props = null) =>
       backgroundColor: props !== null ? props.themeBackground : 'transparent',
       ...alignment.PTlarge
     },
+    locationButton: {
+      position: 'absolute',
+      top: 12,
+      right: 12,
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      padding: 8,
+      borderRadius: 20,
+      elevation: 3,
+    },
     upperContainer: {
       width: '90%',
       alignItems: 'center'

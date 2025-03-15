@@ -29,6 +29,7 @@ import { LocationContext } from "../../context/Location";
 import { mapStyle } from "../../utils/mapStyle";
 import CustomMarker from "../../assets/SVG/imageComponents/CustomMarker";
 import AddressText from "../../components/Address/AddressText";
+import Ionicons from "@expo/vector-icons/Ionicons";
 // import SearchModal from '../../components/Address/SearchModal'
 // import analytics from '../../utils/analytics'
 
@@ -51,9 +52,8 @@ const LONGITUDE_DELTA = 0.0021;
 
 function EditAddress(props) {
   const addressRef = useRef(null);
+  const mapRef = useRef(null);
   const { location, setLocation } = useContext(LocationContext);
-  console.log("location");
-  console.log(props.route.params.location);
   const [id] = useState(props.route.params.id ?? null);
   const [selectedLabel, setSelectedLabel] = useState(
     props.route.params.label ?? labelValues[0].value
@@ -116,6 +116,30 @@ function EditAddress(props) {
     setRegion(region);
   }
 
+    const handleLocateMe = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          FlashMessage({ message: "Location permission denied" });
+          return;
+        }
+  
+        const location = await Location.getCurrentPositionAsync({});
+        const newRegion = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        };
+  
+        // Update map region
+        mapRef.current?.animateToRegion(newRegion, 1000);
+        setRegion(newRegion);
+      } catch (error) {
+        console.log("Location error:", error);
+      }
+    };
+
   function onCompleted({ editAddress }) {
     if (location.id === editAddress.id) {
       setLocation({
@@ -157,9 +181,9 @@ function EditAddress(props) {
         <View style={styles().flex}>
           <View style={styles().mapContainer}>
             <MapView
+              ref={mapRef}
               style={{ flex: 1 }}
               showsUserLocation={true}
-              showsMyLocationButton={true}
               myLocationEnabled={true}
               loadingIndicatorColor={currentTheme.iconColorPink}
               region={region}
@@ -181,6 +205,12 @@ function EditAddress(props) {
               //   })
               // }}
             ></MapView>
+            <TouchableOpacity
+              style={styles().locationButton}
+              onPress={handleLocateMe}
+            >
+              <Ionicons name="locate" size={18} color="black" />
+            </TouchableOpacity>
             <View
               style={{
                 width: 50,
