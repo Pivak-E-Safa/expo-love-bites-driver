@@ -1,12 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { auth } from '../../firebaseConfig'
+import { onAuthStateChanged } from 'firebase/auth'
 
 const AuthContext = React.createContext()
 
 export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
   const [email, setEmail] = useState(null)
   const [id, setId] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user)
+      if (user) {
+        setEmail(user.email)
+        setId(user.uid)
+        setToken(user.accessToken)
+      } else {
+        setEmail(null)
+        setId(null)
+        setToken(null)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [])
 
   const setTokenAsync = async token => {
     if (token) {
@@ -38,25 +58,19 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  useEffect(() => {
-    let isSubscribed = true
-    ;(async() => {
-      const token = await AsyncStorage.getItem('token')
-      const email = await AsyncStorage.getItem('email')
-      const id = await AsyncStorage.getItem('id')
-      if (isSubscribed) {
-        setToken(token);
-        setEmail(email);
-        setId(id);
-      }
-    })()
-    return () => {
-      isSubscribed = false
-    }
-  }, [])
-
   return (
-    <AuthContext.Provider value={{ token, setToken, setTokenAsync, email, setEmail, setEmailAsync, id, setId, setIdAsync }}>
+    <AuthContext.Provider value={{ 
+      user,
+      token, 
+      setToken, 
+      setTokenAsync, 
+      email, 
+      setEmail, 
+      setEmailAsync, 
+      id, 
+      setId, 
+      setIdAsync 
+    }}>
       {children}
     </AuthContext.Provider>
   )
